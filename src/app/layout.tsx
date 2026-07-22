@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "부산기계공고 발명교육센터",
-  description: "부산기계공업고등학교 발명교실 홈페이지. 오늘의 급식 조회 및 발명반 수업 장소 찾기 서비스를 제공합니다.",
+  title: "부산기계공고 1학년 발명 교과",
+  description: "부산기계공업고등학교 발명교과홈페이지. 오늘의 급식 조회 및 발명반 수업 장소 찾기 서비스를 제공합니다.",
 };
 
 export default function RootLayout({

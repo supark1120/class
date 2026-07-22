@@ -158,7 +158,7 @@ export default function Admin() {
         <header className="nav-header">
           <div className="container nav-container">
             <Link href="/" className="nav-logo">
-              부산기계공고 <span>발명교육센터</span>
+              부산기계공고 <span>1학년 발명 교과</span>
             </Link>
             <nav className="nav-links">
               <Link href="/" className="nav-link">
@@ -224,7 +224,7 @@ export default function Admin() {
       <header className="nav-header">
         <div className="container nav-container">
           <Link href="/" className="nav-logo">
-            부산기계공고 <span>발명교육센터 어드민</span>
+            부산기계공고 <span>1학년 발명 교과 어드민</span>
           </Link>
           <nav className="nav-links">
             <Link href="/" className="nav-link">

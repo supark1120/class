@@ -272,7 +272,7 @@ export default function Home() {
       <header className="nav-header">
         <div className="container nav-container">
           <Link href="/" className="nav-logo">
-            부산기계공고 <span>발명교육센터</span>
+            부산기계공고 <span>1학년 발명 교과</span>
           </Link>
           <nav className="nav-links">
             <Link href="/" className="nav-link active">
@@ -511,7 +511,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="footer">
         <div className="container">
-          <div className="footer-school">부산기계공업고등학교 발명교육센터</div>
+          <div className="footer-school">부산기계공업고등학교 1학년 발명 교과</div>
           <p>© 2026 부산기계공업고등학교 발명교실. All Rights Reserved.</p>
         </div>
       </footer>
