@@ -43,19 +43,84 @@ export default function Home() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loadingTimetable, setLoadingTimetable] = useState(false);
 
-  // Initialize dates
+  // Meal selection and live clock state
+  const [selectedMealType, setSelectedMealType] = useState("중식");
+  const [currentTime, setCurrentTime] = useState("");
+
+  // Initialize dates and live clock
   useEffect(() => {
     const kstOffset = 9 * 60 * 60 * 1000;
     const nowKst = new Date(new Date().getTime() + kstOffset);
-    const yyyy = nowKst.getUTCFullYear();
-    const mm = String(nowKst.getUTCMonth() + 1).padStart(2, "0");
-    const dd = String(nowKst.getUTCDate()).padStart(2, "0");
+    const localHour = new Date().getHours();
+    
+    let targetDateKst = new Date(nowKst);
+    let initialMealType = "중식";
+    
+    if (localHour >= 19) {
+      // After 7 PM, advance date to tomorrow
+      targetDateKst.setUTCDate(targetDateKst.getUTCDate() + 1);
+      initialMealType = "조식";
+    } else if (localHour < 9) {
+      initialMealType = "조식";
+    } else if (localHour >= 14) {
+      initialMealType = "석식";
+    }
+    
+    const yyyy = targetDateKst.getUTCFullYear();
+    const mm = String(targetDateKst.getUTCMonth() + 1).padStart(2, "0");
+    const dd = String(targetDateKst.getUTCDate()).padStart(2, "0");
     const formattedDate = `${yyyy}${mm}${dd}`;
     setMealDate(formattedDate);
-    
+    setSelectedMealType(initialMealType);
+
+    // Setup live clock
+    const updateClock = () => {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const seconds = String(now.getSeconds()).padStart(2, "0");
+      setCurrentTime(`${hours}:${minutes}:${seconds}`);
+    };
+    updateClock();
+    const clockInterval = setInterval(updateClock, 1000);
+
     // Fetch timetable and students database
     fetchTimetableAndStudents();
+
+    return () => clearInterval(clockInterval);
   }, []);
+
+  const getAvailableMealTypes = (dateStr: string) => {
+    if (!dateStr) return ["조식", "중식", "석식"];
+    const kstOffset = 9 * 60 * 60 * 1000;
+    const nowKst = new Date(new Date().getTime() + kstOffset);
+    const todayY = nowKst.getUTCFullYear();
+    const todayM = String(nowKst.getUTCMonth() + 1).padStart(2, "0");
+    const todayD = String(nowKst.getUTCDate()).padStart(2, "0");
+    const todayStr = `${todayY}${todayM}${todayD}`;
+
+    if (dateStr > todayStr) {
+      return ["조식", "중식", "석식"];
+    } else if (dateStr < todayStr) {
+      return ["조식", "중식", "석식"];
+    } else {
+      const hour = new Date().getHours();
+      if (hour < 9) return ["조식", "중식", "석식"];
+      if (hour < 14) return ["중식", "석식"];
+      if (hour < 19) return ["석식"];
+      return [];
+    }
+  };
+
+  // Keep selectedMealType in available types on date change
+  useEffect(() => {
+    if (mealDate) {
+      const available = getAvailableMealTypes(mealDate);
+      if (available.length > 0 && !available.includes(selectedMealType)) {
+        setSelectedMealType(available[0]);
+      }
+    }
+  }, [mealDate, selectedMealType]);
 
   // Fetch meals when date changes
   useEffect(() => {
@@ -288,12 +353,16 @@ export default function Home() {
       <main className="container" style={{ paddingBottom: "5rem" }}>
         {/* Hero Section */}
         <section className="hero">
+          <div className="hero-avatar-container">
+            <img src="/teacher_icon.png" alt="Teacher Icon" className="hero-avatar" />
+          </div>
           <div className="hero-badge">💡 창의성과 발명의 배움터</div>
           <h1 className="hero-title">
-            부산기계공업고등학교 <span>발명교실</span>
+            1학년 발명 교과 <span>이동 교실</span>
           </h1>
           <p className="hero-desc">
-            자신의 반 또는 이름을 검색하여 오늘의 발명 수업 시간 및 교실 위치를 확인하세요.
+            자신의 반 또는 이름을 검색하여<br />
+            오늘의 발명 수업 시간 및 교실 위치를 확인하세요.
           </p>
         </section>
 
@@ -386,7 +455,14 @@ export default function Home() {
           {/* Meals Section */}
           <section className="glass meal-card" style={{ gridColumn: "span 1" }}>
             <div className="meal-header">
-              <span className="meal-type lunch">🍱 오늘의 급식</span>
+              <span className="meal-type lunch">
+                🍱 오늘의 급식
+                {currentTime && (
+                  <span style={{ fontSize: "0.8rem", color: "var(--muted)", fontWeight: "600", marginLeft: "0.5rem" }}>
+                    ({currentTime})
+                  </span>
+                )}
+              </span>
               <span className="meal-calories">식단표</span>
             </div>
             
@@ -403,32 +479,78 @@ export default function Home() {
                 </button>
               </div>
 
+              {/* Meal Type Tabs */}
+              {getAvailableMealTypes(mealDate).length > 0 ? (
+                <div style={{ display: "flex", gap: "0.35rem", marginBottom: "1rem", background: "rgba(0,0,0,0.03)", padding: "0.25rem", borderRadius: "0.5rem" }}>
+                  {getAvailableMealTypes(mealDate).map((type) => (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => setSelectedMealType(type)}
+                      className="btn"
+                      style={{
+                        flex: 1,
+                        padding: "0.35rem 0",
+                        fontSize: "0.8rem",
+                        borderRadius: "0.35rem",
+                        border: "none",
+                        cursor: "pointer",
+                        background: selectedMealType === type ? "var(--primary)" : "transparent",
+                        color: selectedMealType === type ? "#ffffff" : "var(--muted)",
+                        fontWeight: selectedMealType === type ? "800" : "600",
+                        boxShadow: selectedMealType === type ? "0 2px 8px rgba(var(--primary-rgb), 0.2)" : "none",
+                        transition: "all 0.2s ease"
+                      }}
+                    >
+                      {type === "조식" ? "🌅 조식" : type === "중식" ? "☀️ 중식" : "🌙 석식"}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+
               {loadingMeals ? (
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "150px", fontWeight: "700", color: "var(--muted)" }}>
                   급식 정보를 불러오는 중...
                 </div>
-              ) : mealData.length > 0 ? (
-                <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", overflowY: "auto", maxHeight: "400px" }}>
-                  {mealData.map((meal) => (
-                    <div key={meal.type} style={{ border: "1px solid var(--border)", borderRadius: "0.75rem", padding: "1rem", background: "rgba(var(--primary-rgb), 0.01)" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-                        <span style={{ 
-                          fontWeight: "800", 
-                          fontSize: "0.95rem",
-                          color: meal.type === "조식" ? "#f59e0b" : meal.type === "중식" ? "#3b82f6" : "#8b5cf6"
-                        }}>
-                          {meal.type}
-                        </span>
-                        <span style={{ fontSize: "0.75rem", color: "var(--muted)", fontWeight: "600" }}>{meal.calories}</span>
-                      </div>
-                      <ul className="meal-dishes">
-                        {meal.dishes.map((dish, i) => (
-                          <li key={i} style={{ fontSize: "0.9rem" }}>{dish}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
+              ) : getAvailableMealTypes(mealDate).length === 0 ? (
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "150px", fontWeight: "700", color: "var(--muted)", textAlign: "center" }}>
+                  오늘의 모든 급식 운영 시간이 지났습니다.
                 </div>
+              ) : mealData.length > 0 ? (
+                (() => {
+                  const filtered = mealData.filter((meal) => meal.type === selectedMealType);
+                  if (filtered.length > 0) {
+                    return (
+                      <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", overflowY: "auto", maxHeight: "400px" }}>
+                        {filtered.map((meal) => (
+                          <div key={meal.type} style={{ border: "1px solid var(--border)", borderRadius: "0.75rem", padding: "1rem", background: "rgba(var(--primary-rgb), 0.01)" }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                              <span style={{ 
+                                fontWeight: "800", 
+                                fontSize: "0.95rem",
+                                color: meal.type === "조식" ? "#f59e0b" : meal.type === "중식" ? "#3b82f6" : "#8b5cf6"
+                              }}>
+                                {meal.type}
+                              </span>
+                              <span style={{ fontSize: "0.75rem", color: "var(--muted)", fontWeight: "600" }}>{meal.calories}</span>
+                            </div>
+                            <ul className="meal-dishes">
+                              {meal.dishes.map((dish, i) => (
+                                <li key={i} style={{ fontSize: "0.9rem" }}>{dish}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "150px", fontWeight: "700", color: "var(--muted)", textAlign: "center" }}>
+                        등록된 {selectedMealType} 정보가 없습니다.
+                      </div>
+                    );
+                  }
+                })()
               ) : (
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "150px", fontWeight: "700", color: "var(--muted)", textAlign: "center" }}>
                   {mealMessage}
@@ -437,11 +559,27 @@ export default function Home() {
 
               <div style={{ marginTop: "auto", paddingTop: "1rem", textAlign: "center" }}>
                 <button className="btn btn-secondary" style={{ width: "100%", padding: "0.5rem 1rem", fontSize: "0.85rem", borderRadius: "0.75rem" }} onClick={() => {
-                  const nowKst = new Date(new Date().getTime() + 9 * 60 * 60 * 1000);
-                  const yyyy = nowKst.getUTCFullYear();
-                  const mm = String(nowKst.getUTCMonth() + 1).padStart(2, "0");
-                  const dd = String(nowKst.getUTCDate()).padStart(2, "0");
+                  const kstOffset = 9 * 60 * 60 * 1000;
+                  const nowKst = new Date(new Date().getTime() + kstOffset);
+                  const localHour = new Date().getHours();
+                  
+                  let targetDateKst = new Date(nowKst);
+                  let initialMealType = "중식";
+                  
+                  if (localHour >= 19) {
+                    targetDateKst.setUTCDate(targetDateKst.getUTCDate() + 1);
+                    initialMealType = "조식";
+                  } else if (localHour < 9) {
+                    initialMealType = "조식";
+                  } else if (localHour >= 14) {
+                    initialMealType = "석식";
+                  }
+                  
+                  const yyyy = targetDateKst.getUTCFullYear();
+                  const mm = String(targetDateKst.getUTCMonth() + 1).padStart(2, "0");
+                  const dd = String(targetDateKst.getUTCDate()).padStart(2, "0");
                   setMealDate(`${yyyy}${mm}${dd}`);
+                  setSelectedMealType(initialMealType);
                 }}>
                   오늘 급식으로 돌아가기
                 </button>
