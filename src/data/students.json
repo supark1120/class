@@ -1,0 +1,102 @@
+[
+  {
+    "name": "홍길동",
+    "grade": 1,
+    "class": 6
+  },
+  {
+    "name": "김철수",
+    "grade": 1,
+    "class": 3
+  },
+  {
+    "name": "이영희",
+    "grade": 1,
+    "class": 7
+  },
+  {
+    "name": "박민수",
+    "grade": 1,
+    "class": 9
+  },
+  {
+    "name": "최성우",
+    "grade": 1,
+    "class": 14
+  },
+  {
+    "name": "정지우",
+    "grade": 1,
+    "class": 4
+  },
+  {
+    "name": "강다현",
+    "grade": 1,
+    "class": 10
+  },
+  {
+    "name": "조현우",
+    "grade": 1,
+    "class": 1
+  },
+  {
+    "name": "윤지민",
+    "grade": 1,
+    "class": 11
+  },
+  {
+    "name": "임재희",
+    "grade": 1,
+    "class": 12
+  },
+  {
+    "name": "한동훈",
+    "grade": 1,
+    "class": 13
+  },
+  {
+    "name": "오세훈",
+    "grade": 1,
+    "class": 8
+  },
+  {
+    "name": "신동엽",
+    "grade": 1,
+    "class": 15
+  },
+  {
+    "name": "유재석",
+    "grade": 1,
+    "class": 2
+  },
+  {
+    "name": "강호동",
+    "grade": 1,
+    "class": 5
+  },
+  {
+    "name": "이몽룡",
+    "grade": 1,
+    "class": 6
+  },
+  {
+    "name": "성춘향",
+    "grade": 1,
+    "class": 3
+  },
+  {
+    "name": "임꺽정",
+    "grade": 1,
+    "class": 7
+  },
+  {
+    "name": "홍길순",
+    "grade": 1,
+    "class": 9
+  },
+  {
+    "name": "김영희",
+    "grade": 1,
+    "class": 14
+  }
+]

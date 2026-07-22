@@ -1,0 +1,107 @@
+{
+  "101": {
+    "day": "수",
+    "period": 4,
+    "time": "11:40",
+    "teacher": "박은영",
+    "location": "창의발명실 (2층)"
+  },
+  "102": {
+    "day": "수",
+    "period": 7,
+    "time": "15:30",
+    "teacher": "박은영",
+    "location": "발명공작실 (2층)"
+  },
+  "103": {
+    "day": "수",
+    "period": 1,
+    "time": "08:40",
+    "teacher": "박은영",
+    "location": "창의발명실 (2층)"
+  },
+  "104": {
+    "day": "월",
+    "period": 4,
+    "time": "11:40",
+    "teacher": "박은영",
+    "location": "무상관2층 상상디자인실"
+  },
+  "105": {
+    "day": "목",
+    "period": 7,
+    "time": "15:30",
+    "teacher": "박은영",
+    "location": "발명공작실 (2층)"
+  },
+  "106": {
+    "day": "월",
+    "period": 1,
+    "time": "08:40",
+    "teacher": "박은영",
+    "location": "무상관2층 상상디자인실"
+  },
+  "107": {
+    "day": "금",
+    "period": 1,
+    "time": "08:40",
+    "teacher": "박은영",
+    "location": "CAD/상상실 (3층)"
+  },
+  "108": {
+    "day": "목",
+    "period": 6,
+    "time": "14:30",
+    "teacher": "박은영",
+    "location": "창의발명실 (2층)"
+  },
+  "109": {
+    "day": "월",
+    "period": 2,
+    "time": "09:40",
+    "teacher": "박은영",
+    "location": "무상관2층 상상디자인실"
+  },
+  "110": {
+    "day": "화",
+    "period": 4,
+    "time": "11:40",
+    "teacher": "박은영",
+    "location": "CAD/상상실 (3층)"
+  },
+  "111": {
+    "day": "목",
+    "period": 4,
+    "time": "11:40",
+    "teacher": "박은영",
+    "location": "창의발명실 (2층)"
+  },
+  "112": {
+    "day": "화",
+    "period": 6,
+    "time": "14:30",
+    "teacher": "박은영",
+    "location": "발명공작실 (2층)"
+  },
+  "113": {
+    "day": "수",
+    "period": 6,
+    "time": "14:30",
+    "teacher": "박은영",
+    "location": "CAD/상상실 (3층)"
+  },
+  "114": {
+    "day": "화",
+    "period": 3,
+    "time": "10:40",
+    "teacher": "박은영",
+    "location": "창의발명실 (2층)"
+  },
+  "115": {
+    "day": "화",
+    "period": 7,
+    "time": "15:30",
+    "teacher": "박은영",
+    "location": "발명공작실 (2층)"
+  }
+}
